@@ -173,6 +173,88 @@
   }
 }
 
+/* Hero Section - Peach Gradient Style */
+.hero-peach-container {
+  background: linear-gradient(135deg,
+    #ffcdb2 0%,
+    #ffb4a2 25%,
+    #e5989b 50%,
+    #ffb4a2 75%,
+    #ffcdb2 100%);
+}
+
+.hero-gradient-overlay {
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(255, 183, 148, 0.6) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(255, 200, 170, 0.5) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(229, 152, 155, 0.3) 0%, transparent 70%);
+  animation: gradientPulse 8s ease-in-out infinite;
+}
+
+@keyframes gradientPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.hero-icon-box {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 10px 40px rgba(180, 100, 100, 0.15),
+    0 2px 10px rgba(0, 0, 0, 0.05);
+  animation: heroFloat 6s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(2deg); }
+}
+
+.hero-glow-ring {
+  background: linear-gradient(135deg,
+    rgba(255, 183, 148, 0.5) 0%,
+    rgba(229, 152, 155, 0.3) 50%,
+    rgba(255, 200, 170, 0.5) 100%);
+  filter: blur(20px);
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+.hero-deco-circle {
+  animation: decoRotate 30s linear infinite;
+}
+
+.hero-deco-circle-reverse {
+  animation: decoRotate 25s linear infinite reverse;
+}
+
+@keyframes decoRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hero-particle {
+  animation: particleFloat 10s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+  25% { transform: translate(10px, -20px) scale(1.2); opacity: 0.8; }
+  50% { transform: translate(-5px, -40px) scale(1); opacity: 0.6; }
+  75% { transform: translate(15px, -20px) scale(0.8); opacity: 0.4; }
+}
+
+.hero-main-title {
+  background: linear-gradient(135deg, #6b4c4c 0%, #8b5a5a 50%, #4a3535 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 4px 30px rgba(107, 76, 76, 0.2);
+}
+
 /* Custom scrollbar for light theme */
 @media (prefers-color-scheme: light) {
   ::-webkit-scrollbar {

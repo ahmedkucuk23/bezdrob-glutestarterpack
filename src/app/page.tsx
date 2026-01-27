@@ -232,6 +232,7 @@ const modules = [
 export default function LandingPage() {
   const [showStickyBar, setShowStickyBar] = useState(false)
   const [videoPlaying, setVideoPlaying] = useState(false)
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
 
   // Set cart close date (example: 5 days from now)
   const cartCloseDate = new Date()
@@ -244,6 +245,24 @@ export default function LandingPage() {
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date().getTime()
+      const distance = cartCloseDate.getTime() - now
+
+      if (distance > 0) {
+        setTimeLeft({
+          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((distance % (1000 * 60)) / 1000)
+        })
+      }
+    }, 1000)
+
+    return () => clearInterval(timer)
   }, [])
 
   return (
@@ -275,124 +294,270 @@ export default function LandingPage() {
         )}
       </AnimatePresence>
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center pt-8 pb-20 overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
-          <div className="absolute inset-0 bg-grid opacity-20" />
-          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-peach-500/10 rounded-full blur-[200px]" />
-          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-coral-500/10 rounded-full blur-[150px]" />
+      {/* Hero Section - Peach Gradient Style */}
+      <section className="relative w-full min-h-[160vh] md:min-h-[130vh] overflow-hidden">
+        {/* Solid peach background for the entire section */}
+        <div className="absolute inset-0 bg-[#B26A47]" />
+
+        {/* Background Image - Mobile (100vh) */}
+        <div className="absolute top-0 left-0 right-0 h-screen md:hidden">
+          <Image
+            src="/hero-bg-mobile.png"
+            alt=""
+            fill
+            className="object-cover object-top"
+            priority
+          />
         </div>
 
-        <div className="container mx-auto px-4 relative z-10">
+        {/* Background Image - Desktop (130vh) */}
+        <div className="absolute top-0 left-0 right-0 h-[130vh] hidden md:block">
+          <Image
+            src="/hero-bg.avif"
+            alt=""
+            fill
+            className="object-cover object-top"
+            priority
+          />
+        </div>
+
+        {/* Particles */}
+        {[
+          { top: '20%', left: '20%', delay: '0s' },
+          { top: '60%', left: '15%', delay: '2s' },
+          { top: '30%', right: '20%', delay: '4s' },
+          { top: '70%', right: '15%', delay: '6s' },
+          { top: '50%', left: '5%', delay: '1s' },
+          { top: '40%', right: '5%', delay: '3s' },
+        ].map((pos, i) => (
+          <div
+            key={i}
+            className="hero-particle absolute w-1.5 h-1.5 bg-white/60 rounded-full"
+            style={{ top: pos.top, left: pos.left, right: pos.right, animationDelay: pos.delay }}
+          />
+        ))}
+
+        {/* Floating Icons */}
+        <div className="absolute inset-0 pointer-events-none hidden lg:block">
+          {/* Problem Icon */}
           <motion.div
-            initial="initial"
-            animate="animate"
-            variants={staggerContainer}
-            className="max-w-5xl mx-auto text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="hero-icon-box absolute top-[12%] left-[8%] rounded-[20px] p-5 flex flex-col items-center gap-2"
           >
-            {/* Urgency Badge */}
-            <motion.div
-              variants={fadeInUp}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 backdrop-blur-sm rounded-full mb-6 border border-red-500/30"
-            >
-              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              <span className="text-sm text-red-300 font-medium">⚡ OGRANIČENA PONUDA - Vrata se zatvaraju uskoro!</span>
-            </motion.div>
+            <svg viewBox="0 0 64 64" fill="none" className="w-[50px] h-[50px]">
+              <circle cx="32" cy="20" r="12" fill="#ffb4a2"/>
+              <path d="M20 52c0-8 5-14 12-14s12 6 12 14" stroke="#6b4c4c" strokeWidth="3" fill="none"/>
+              <ellipse cx="32" cy="48" rx="16" ry="8" fill="#e5989b" opacity="0.5"/>
+            </svg>
+            <span className="text-[11px] font-semibold text-[#6b4c4c] uppercase tracking-wider">Problem</span>
+          </motion.div>
 
-            {/* Main Headline */}
-            <motion.h1
-              variants={fadeInUp}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-6 text-white"
-            >
-              Radiš čučnjeve mjesecima,
-              <br />
-              <span className="text-gradient">a guzica izgleda isto?</span>
-            </motion.h1>
+          {/* Solution Icon */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="hero-icon-box absolute top-[8%] left-[30%] rounded-[20px] p-5 flex flex-col items-center gap-2"
+            style={{ animationDelay: '1s' }}
+          >
+            <svg viewBox="0 0 64 64" fill="none" className="w-[50px] h-[50px]">
+              <path d="M25 50c-3-2-5-8-4-15 1-7 5-15 10-20 3-3 8-5 12-3 4 2 6 8 5 15-1 8-4 15-8 20-3 4-10 6-15 3z" fill="#ffcdb2" stroke="#6b4c4c" strokeWidth="2"/>
+              <circle cx="42" cy="25" r="3" fill="#ffb4a2"/>
+              <circle cx="38" cy="20" r="2" fill="#ffb4a2"/>
+              <circle cx="46" cy="30" r="2" fill="#ffb4a2"/>
+            </svg>
+            <span className="text-[11px] font-semibold text-[#6b4c4c] uppercase tracking-wider">Solution</span>
+          </motion.div>
 
-            {/* Subheadline */}
-            <motion.p
-              variants={fadeInUp}
-              className="text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed"
-            >
-              Otkrij <span className="text-peach-400 font-semibold">Tehniku Aktivacije Stopala™</span> koju koristi 95% žena koje STVARNO grade gluteuse — i konačno vidi rezultate za koje si mislila da su nemoguće.
-            </motion.p>
+          {/* Offer Icon */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="hero-icon-box absolute top-[10%] right-[25%] rounded-[20px] p-5 flex flex-col items-center gap-2"
+            style={{ animationDelay: '2s' }}
+          >
+            <svg viewBox="0 0 64 64" fill="none" className="w-[50px] h-[50px]">
+              <rect x="8" y="12" width="48" height="40" rx="4" fill="#fff" stroke="#6b4c4c" strokeWidth="2"/>
+              <rect x="14" y="20" width="20" height="4" rx="2" fill="#ffb4a2"/>
+              <rect x="14" y="28" width="36" height="3" rx="1.5" fill="#e5989b" opacity="0.5"/>
+              <rect x="14" y="34" width="30" height="3" rx="1.5" fill="#e5989b" opacity="0.5"/>
+              <rect x="14" y="40" width="25" height="3" rx="1.5" fill="#e5989b" opacity="0.5"/>
+              <rect x="38" y="18" width="14" height="10" rx="2" fill="#ffcdb2" stroke="#6b4c4c" strokeWidth="1"/>
+            </svg>
+            <span className="text-[11px] font-semibold text-[#6b4c4c] uppercase tracking-wider">Offer</span>
+          </motion.div>
 
-            {/* CTA Buttons */}
-            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <a href={WHOP_LINK} className="btn-primary text-lg urgency-badge group">
-                Započni Svoju Transformaciju
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
-              <button
-                onClick={() => setVideoPlaying(true)}
-                className="btn-outline group"
-              >
-                <Play className="w-5 h-5" />
-                Pogledaj Video
-              </button>
-            </motion.div>
+          {/* Result Icon */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+            className="hero-icon-box absolute top-[15%] right-[6%] rounded-[20px] p-5 flex flex-col items-center gap-2"
+            style={{ animationDelay: '3s' }}
+          >
+            <svg viewBox="0 0 64 64" fill="none" className="w-[50px] h-[50px]">
+              <circle cx="32" cy="18" r="10" fill="#ffb4a2"/>
+              <path d="M22 52c0-6 4-12 10-12s10 6 10 12" stroke="#6b4c4c" strokeWidth="3" fill="none"/>
+              <path d="M38 35l8-8m0 0l-3-3m3 3l3-3" stroke="#e5989b" strokeWidth="2" strokeLinecap="round"/>
+              <ellipse cx="42" cy="42" rx="8" ry="4" fill="#ffcdb2" opacity="0.6"/>
+            </svg>
+            <span className="text-[11px] font-semibold text-[#6b4c4c] uppercase tracking-wider">Result</span>
+          </motion.div>
 
-            {/* Social Proof Quick Stats */}
-            <motion.div
-              variants={fadeInUp}
-              className="flex flex-wrap justify-center gap-8 mb-12"
-            >
-              {[
-                { value: "2000+", label: "Transformacija" },
-                { value: "39", label: "Video Lekcija" },
-                { value: "655+", label: "Minuta Sadržaja" },
-                { value: "60", label: "Dana Garancije" }
-              ].map((stat, i) => (
-                <div key={i} className="text-center">
-                  <div className="text-3xl sm:text-4xl font-bold text-peach-400">{stat.value}</div>
-                  <div className="text-sm text-gray-400">{stat.label}</div>
-                </div>
-              ))}
-            </motion.div>
+          {/* Dumbbell Icon */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+            className="hero-icon-box absolute bottom-[20%] left-[5%] rounded-[20px] p-5 flex flex-col items-center gap-2"
+            style={{ animationDelay: '1.5s' }}
+          >
+            <svg viewBox="0 0 64 64" fill="none" className="w-[50px] h-[50px]">
+              <rect x="8" y="26" width="8" height="12" rx="2" fill="#6b4c4c"/>
+              <rect x="48" y="26" width="8" height="12" rx="2" fill="#6b4c4c"/>
+              <rect x="14" y="28" width="6" height="8" rx="1" fill="#8b5a5a"/>
+              <rect x="44" y="28" width="6" height="8" rx="1" fill="#8b5a5a"/>
+              <rect x="20" y="30" width="24" height="4" rx="2" fill="#a67070"/>
+            </svg>
+            <span className="text-[11px] font-semibold text-[#6b4c4c] uppercase tracking-wider">Training</span>
+          </motion.div>
 
-            {/* Countdown Timer */}
-            <motion.div variants={fadeInUp} className="mb-8">
-              <p className="text-white/70 mb-4 text-sm uppercase tracking-wider">Vrata se zatvaraju za:</p>
-              <CountdownTimer targetDate={cartCloseDate} />
-            </motion.div>
-
-            {/* Trust Badges */}
-            <motion.div
-              variants={fadeInUp}
-              className="flex flex-wrap justify-center gap-4 text-sm text-gray-400"
-            >
-              <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4 text-green-500" />
-                <span>60 Dana Garancije</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Lock className="w-4 h-4 text-green-500" />
-                <span>Sigurna Kupovina</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Zap className="w-4 h-4 text-green-500" />
-                <span>Instant Pristup</span>
-              </div>
-            </motion.div>
+          {/* Target Icon */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2 }}
+            className="hero-icon-box absolute bottom-[15%] right-[8%] rounded-[20px] p-5 flex flex-col items-center gap-2"
+            style={{ animationDelay: '2.5s' }}
+          >
+            <svg viewBox="0 0 64 64" fill="none" className="w-[50px] h-[50px]">
+              <circle cx="32" cy="32" r="24" stroke="#e5989b" strokeWidth="3" fill="none"/>
+              <circle cx="32" cy="32" r="16" stroke="#ffb4a2" strokeWidth="3" fill="none"/>
+              <circle cx="32" cy="32" r="8" stroke="#6b4c4c" strokeWidth="3" fill="none"/>
+              <circle cx="32" cy="32" r="3" fill="#6b4c4c"/>
+            </svg>
+            <span className="text-[11px] font-semibold text-[#6b4c4c] uppercase tracking-wider">Goals</span>
           </motion.div>
         </div>
 
-        {/* Scroll indicator */}
+        {/* Top Content - Urgency Badge + Headline */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          initial="initial"
+          animate="animate"
+          variants={staggerContainer}
+          className="absolute top-8 md:top-12 left-0 right-0 z-10 flex flex-col items-center text-center px-4"
         >
-          <div className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2">
-            <motion.div
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1.5 h-1.5 bg-peach-400 rounded-full"
-            />
-          </div>
+          {/* Urgency Badge */}
+          <motion.div
+            variants={fadeInUp}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 backdrop-blur-sm rounded-full mb-4 border border-red-500/30"
+          >
+            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+            <span className="text-sm text-red-700 font-medium">⚡ OGRANIČENA PONUDA - Vrata se zatvaraju uskoro!</span>
+          </motion.div>
+
+          {/* Main Headline */}
+          <motion.h1
+            variants={fadeInUp}
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-[#4a3535]"
+          >
+            Treniraš mjesecima,
+            <br />
+            <span className="bg-gradient-to-r from-[#6b4c4c] via-[#8b5a5a] to-[#a67070] bg-clip-text text-transparent">a guzica izgleda isto?</span>
+          </motion.h1>
         </motion.div>
+
+        {/* Bottom Content - CTA and rest */}
+        <motion.div
+          initial="initial"
+          animate="animate"
+          variants={staggerContainer}
+          className="absolute top-[70vh] left-0 right-0 z-10 flex flex-col items-center text-center px-4 pb-12"
+        >
+          {/* Subheadline */}
+          <motion.p
+            variants={fadeInUp}
+            className="text-base sm:text-lg md:text-xl text-white max-w-3xl mx-auto mb-6 leading-relaxed font-semibold bg-[#4a3535]/70 backdrop-blur-sm rounded-xl px-4 py-3"
+          >
+            Otkrij <span className="text-[#ffcdb2] font-bold">Tehniku Aktivacije Stopala™</span> koju koristi 95% žena koje STVARNO grade gluteuse — i konačno vidi rezultate za koje si mislila da su nemoguće.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+            <a href={WHOP_LINK} className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#6b4c4c] text-white rounded-xl font-semibold text-lg hover:bg-[#5a3e3e] transition-all duration-300 hover:shadow-lg hover:shadow-[#6b4c4c]/25 active:scale-[0.98] urgency-badge group">
+              Započni Svoju Transformaciju
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <button
+              onClick={() => setVideoPlaying(true)}
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/80 backdrop-blur-sm border-2 border-[#6b4c4c]/30 text-[#6b4c4c] rounded-xl font-semibold text-lg hover:bg-white transition-all duration-300 active:scale-[0.98] group"
+            >
+              <Play className="w-5 h-5" />
+              Pogledaj Video
+            </button>
+          </motion.div>
+
+          {/* Social Proof Quick Stats */}
+          <motion.div
+            variants={fadeInUp}
+            className="flex flex-wrap justify-center gap-6 sm:gap-8 mb-8"
+          >
+            {[
+              { value: "2000+", label: "Transformacija" },
+              { value: "39", label: "Video Lekcija" },
+              { value: "655+", label: "Minuta Sadržaja" },
+              { value: "60", label: "Dana Garancije" }
+            ].map((stat, i) => (
+              <div key={i} className="text-center">
+                <div className="text-2xl sm:text-3xl font-bold text-white">{stat.value}</div>
+                <div className="text-sm text-white/80">{stat.label}</div>
+              </div>
+            ))}
+          </motion.div>
+
+          {/* Countdown Timer */}
+          <motion.div variants={fadeInUp} className="mb-6">
+            <p className="text-white/90 mb-4 text-sm uppercase tracking-wider font-medium">Vrata se zatvaraju za:</p>
+            <div className="flex gap-3 sm:gap-4 justify-center">
+              {[
+                { value: timeLeft.days, label: "DANA" },
+                { value: timeLeft.hours, label: "SATI" },
+                { value: timeLeft.minutes, label: "MIN" },
+                { value: timeLeft.seconds, label: "SEK" }
+              ].map((item, i) => (
+                <div key={i} className="text-center">
+                  <div className="w-16 sm:w-20 h-16 sm:h-20 bg-white rounded-xl flex items-center justify-center shadow-lg">
+                    <span className="text-2xl sm:text-3xl font-bold text-[#B26A47] countdown-number">{String(item.value).padStart(2, '0')}</span>
+                  </div>
+                  <span className="text-xs text-white mt-2 block font-medium">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Trust Badges */}
+          <motion.div
+            variants={fadeInUp}
+            className="flex flex-wrap justify-center gap-4 text-sm text-white"
+          >
+            <div className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-green-400" />
+              <span>60 Dana Garancije</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Lock className="w-4 h-4 text-green-400" />
+              <span>Sigurna Kupovina</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Zap className="w-4 h-4 text-green-400" />
+              <span>Instant Pristup</span>
+            </div>
+          </motion.div>
+        </motion.div>
+
       </section>
 
       {/* Video Modal */}
