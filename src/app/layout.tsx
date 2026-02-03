@@ -24,19 +24,34 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "GLUTE LAB STARTER PACK™ | Bezdrob - Transformiši Svoje Gluteuse",
-  description: "5 modula, 39 video lekcija, 655+ minuta sadržaja. Naučite Tehniku Aktivacije Stopala™ i konačno izgradite gluteuse o kojima ste sanjali. 60 dana garancije.",
-  keywords: ["glute training", "gluteus trening", "Bezdrob", "fitness program", "transformacija tijela", "online coaching"],
+  description: "5 modula, 39 video lekcija, 220+ minuta sadržaja. Naučite Tehniku Aktivacije Stopala™ i konačno izgradite gluteuse o kojima ste sanjali. 2000+ transformacija. 60 dana garancije.",
+  keywords: ["glute training", "gluteus trening", "Bezdrob", "Imran Bezdrob", "fitness program", "transformacija tijela", "online coaching", "glute starter pack", "trening gluteusa", "aktivacija stopala"],
   authors: [{ name: "Imran Bezdrob" }],
+  metadataBase: new URL("https://bezdrob.com"),
   openGraph: {
     title: "GLUTE LAB STARTER PACK™ | Bezdrob",
-    description: "Konačno izgradite gluteuse o kojima ste sanjali. 5 modula, 39 video lekcija, 60 dana garancije.",
+    description: "Otkrij metodu koju koriste žene koje STVARNO grade gluteuse. 5 modula, 39 video lekcija, 2000+ transformacija. 60 dana garancije.",
     type: "website",
     locale: "bs_BA",
+    siteName: "Bezdrob Transformation Program",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "GLUTE LAB STARTER PACK by Imran Bezdrob",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "GLUTE LAB STARTER PACK™ | Bezdrob",
-    description: "Konačno izgradite gluteuse o kojima ste sanjali.",
+    description: "Otkrij metodu koju koriste žene koje STVARNO grade gluteuse. 5 modula, 39 video lekcija, 60 dana garancije.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 }
 

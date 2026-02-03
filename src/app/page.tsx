@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import {
@@ -119,45 +119,35 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   )
 }
 
-// Testimonial data
-const testimonials = [
-  {
-    quote: "Prvi put sam osjetila gluteuse tokom čučnja! Ne mogu vjerovati kolika je razlika.",
-    author: "Amela H.",
-    result: "+6cm u obimu",
-    avatar: "🍑"
-  },
-  {
-    quote: "Mjesecima sam radila čučnjeve bez rezultata. Tehnika Aktivacije Stopala je sve promijenila!",
-    author: "Sara M.",
-    result: "8 sedmica",
-    avatar: "💪"
-  },
-  {
-    quote: "Konačno znam da li radim vježbe ispravno. Najbolja investicija u sebe!",
-    author: "Lejla K.",
-    result: "Transformacija",
-    avatar: "⭐"
-  },
-  {
-    quote: "Moj dečko je primijetio razliku nakon samo jednog treninga! Hvala Imrane!",
-    author: "Dina S.",
-    result: "+4cm u 6 sedmica",
-    avatar: "🔥"
-  },
-  {
-    quote: "Osjećam se kao da sam pronašla sveti gral za gluteuse. Sve je objašnjeno savršeno.",
-    author: "Amina R.",
-    result: "Život promijenjen",
-    avatar: "✨"
-  },
-  {
-    quote: "2 godine pokušavam, ovo je prvi put da vidim pravi smisao u treningu gluteusa.",
-    author: "Nejra T.",
-    result: "+5cm za 10 sedmica",
-    avatar: "🎯"
-  }
+// Result screenshot images - manually balanced across 3 columns
+const resultColumns = [
+  // Column 1
+  [
+    "/result-1.jpg",   // Ne mogu vjerovati kolika je razlika (short)
+    "/result-2.jpg",   // Ogromna razlika atomska bomba (short)
+    "/result-5.jpg",   // Instagram story reply - investment (tall)
+    "/result-7.jpg",   // Itekakooo se osjetii (short)
+  ],
+  // Column 2
+  [
+    "/result-3.jpg",   // WhatsApp hip trust bez patika (medium)
+    "/result-4.jpg",   // Jedva cekala trening (medium)
+    "/result-6.jpg",   // Obavezno cu probati (short)
+    "/result-8.jpg",   // Vjeruj brate need all knowledge (short)
+    "/result-14.jpg",  // Hip thrust sprava savjet (medium)
+  ],
+  // Column 3
+  [
+    "/result-9.jpg",   // Tacno cilja gdje treba (short)
+    "/result-10.jpg",  // Coach nisam ni sumnjala (medium)
+    "/result-13.jpg",  // Instagram DM trnce u gluteusu (tall)
+    "/result-11.jpg",  // Izula sam se u carapama (short)
+    "/result-12.jpg",  // WhatsApp Jutroo bas se bolje osjeti (medium)
+  ],
 ]
+
+// Flat list for mobile view
+const allScreenshots = resultColumns.flat()
 
 // FAQ data
 const faqs = [
@@ -200,32 +190,27 @@ const modules = [
   {
     title: "Modul 1: Osnove Aktivacije",
     description: "Naučite kako 'probuditi' gluteuse prije svakog treninga. Mind-muscle konekcija od prvog dana.",
-    lessons: 8,
-    duration: "120+ min"
+    lessons: 8
   },
   {
     title: "Modul 2: Tehnika Stopala",
     description: "Ekskluzivna Tehnika Aktivacije Stopala™ - tajna koju većina trenera nikad nije saznala.",
-    lessons: 7,
-    duration: "95+ min"
+    lessons: 7
   },
   {
     title: "Modul 3: Vježbe za Rast",
     description: "Precizna izvedba svake vježbe. Od hip thrusta do Bulgarian split squata - sve detaljno objašnjeno.",
-    lessons: 12,
-    duration: "180+ min"
+    lessons: 12
   },
   {
     title: "Modul 4: Progresija",
     description: "Kako pravilno povećavati težine i intenzitet. Progresivno opterećenje bez ozljeda.",
-    lessons: 6,
-    duration: "85+ min"
+    lessons: 6
   },
   {
     title: "Modul 5: Prehrana & Oporavak",
     description: "Šta jesti za optimalni rast mišića. Kako se pravilno odmarati između treninga.",
-    lessons: 6,
-    duration: "75+ min"
+    lessons: 6
   }
 ]
 
@@ -234,10 +219,14 @@ export default function LandingPage() {
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
 
-  // Set cart close date (example: 5 days from now)
-  const cartCloseDate = new Date()
-  cartCloseDate.setDate(cartCloseDate.getDate() + 5)
-  cartCloseDate.setHours(21, 0, 0, 0)
+  // Set cart close date (5 days from now at 21:00)
+  const cartCloseDate = useMemo(() => {
+    const date = new Date()
+    date.setDate(date.getDate() + 5)
+    date.setHours(21, 0, 0, 0)
+    return date
+  }, [])
+  const [showAllDMs, setShowAllDMs] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -277,287 +266,238 @@ export default function LandingPage() {
             className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md border-b border-gray-800"
           >
             <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-              <div className="hidden sm:flex items-center gap-3">
-                <Flame className="w-5 h-5 text-peach-500" />
-                <span className="text-white font-medium">GLUTE LAB STARTER PACK™</span>
-                <span className="text-peach-400 text-sm">od 299 KM</span>
+              <div className="flex items-center">
+                <Image src="/bezdrob-full-logo.png" alt="Bezdrob Transformation Program" width={180} height={32} className="invert h-6 sm:h-8 w-auto" />
               </div>
-              <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-                <span className="text-white/70 text-sm hidden md:block">Vrata se zatvaraju uskoro!</span>
-                <a href={WHOP_LINK} className="btn-primary !py-2.5 !px-6 !text-base urgency-badge">
-                  Pridruži Se Sada
-                  <ArrowRight className="w-4 h-4" />
-                </a>
-              </div>
+              <a href={WHOP_LINK} className="btn-primary !py-2.5 !px-6 !text-base urgency-badge">
+                Pridruži Se Sada
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Hero Section - Peach Gradient Style */}
-      <section className="relative w-full min-h-[160vh] md:min-h-[130vh] overflow-hidden">
-        {/* Solid peach background for the entire section */}
-        <div className="absolute inset-0 bg-[#B26A47]" />
-
-        {/* Background Image - Mobile (100vh) */}
-        <div className="absolute top-0 left-0 right-0 h-screen md:hidden">
-          <Image
-            src="/hero-bg-mobile.png"
-            alt=""
-            fill
-            className="object-cover object-top"
-            priority
-          />
+      {/* Hero Section - Clean & Powerful */}
+      <section className="relative min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-black overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-peach-500/20 rounded-full blur-[150px]" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-coral-500/15 rounded-full blur-[120px]" />
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23fff%22 fill-opacity=%220.03%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]" />
         </div>
 
-        {/* Background Image - Desktop (130vh) */}
-        <div className="absolute top-0 left-0 right-0 h-[130vh] hidden md:block">
-          <Image
-            src="/hero-bg.avif"
-            alt=""
-            fill
-            className="object-cover object-top"
-            priority
-          />
-        </div>
-
-        {/* Particles */}
-        {[
-          { top: '20%', left: '20%', delay: '0s' },
-          { top: '60%', left: '15%', delay: '2s' },
-          { top: '30%', right: '20%', delay: '4s' },
-          { top: '70%', right: '15%', delay: '6s' },
-          { top: '50%', left: '5%', delay: '1s' },
-          { top: '40%', right: '5%', delay: '3s' },
-        ].map((pos, i) => (
-          <div
-            key={i}
-            className="hero-particle absolute w-1.5 h-1.5 bg-white/60 rounded-full"
-            style={{ top: pos.top, left: pos.left, right: pos.right, animationDelay: pos.delay }}
-          />
-        ))}
-
-        {/* Floating Icons */}
-        <div className="absolute inset-0 pointer-events-none hidden lg:block">
-          {/* Problem Icon */}
+        <div className="relative z-10 container mx-auto px-4 pt-8 pb-12 min-h-screen flex flex-col">
+          {/* Top Bar - Logo & Urgency */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="hero-icon-box absolute top-[12%] left-[8%] rounded-[20px] p-5 flex flex-col items-center gap-2"
+            className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 md:mb-12"
           >
-            <svg viewBox="0 0 64 64" fill="none" className="w-[50px] h-[50px]">
-              <circle cx="32" cy="20" r="12" fill="#ffb4a2"/>
-              <path d="M20 52c0-8 5-14 12-14s12 6 12 14" stroke="#6b4c4c" strokeWidth="3" fill="none"/>
-              <ellipse cx="32" cy="48" rx="16" ry="8" fill="#e5989b" opacity="0.5"/>
-            </svg>
-            <span className="text-[11px] font-semibold text-[#6b4c4c] uppercase tracking-wider">Problem</span>
+            <div className="flex items-center">
+              <Image src="/bezdrob-full-logo.png" alt="Bezdrob Transformation Program" width={220} height={40} className="invert h-8 sm:h-10 w-auto" />
+            </div>
+            <div className="flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-full">
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+              <span className="text-red-400 text-sm font-medium">Ograničena ponuda - Samo 5 dana u prodaji!</span>
+            </div>
           </motion.div>
 
-          {/* Solution Icon */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="hero-icon-box absolute top-[8%] left-[30%] rounded-[20px] p-5 flex flex-col items-center gap-2"
-            style={{ animationDelay: '1s' }}
-          >
-            <svg viewBox="0 0 64 64" fill="none" className="w-[50px] h-[50px]">
-              <path d="M25 50c-3-2-5-8-4-15 1-7 5-15 10-20 3-3 8-5 12-3 4 2 6 8 5 15-1 8-4 15-8 20-3 4-10 6-15 3z" fill="#ffcdb2" stroke="#6b4c4c" strokeWidth="2"/>
-              <circle cx="42" cy="25" r="3" fill="#ffb4a2"/>
-              <circle cx="38" cy="20" r="2" fill="#ffb4a2"/>
-              <circle cx="46" cy="30" r="2" fill="#ffb4a2"/>
-            </svg>
-            <span className="text-[11px] font-semibold text-[#6b4c4c] uppercase tracking-wider">Solution</span>
-          </motion.div>
+          {/* Main Content */}
+          <div className="flex-1 flex items-center">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
+              {/* Left - Text Content */}
+              <motion.div
+                initial="initial"
+                animate="animate"
+                variants={staggerContainer}
+                className="text-center lg:text-left"
+              >
+                {/* Badge */}
+                <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-3 py-1.5 bg-peach-500/20 border border-peach-500/30 rounded-full mb-6">
+                  <Sparkles className="w-4 h-4 text-peach-400" />
+                  <span className="text-peach-300 text-sm font-medium">Novo: Tehnika Aktivacije Stopala™</span>
+                </motion.div>
 
-          {/* Offer Icon */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="hero-icon-box absolute top-[10%] right-[25%] rounded-[20px] p-5 flex flex-col items-center gap-2"
-            style={{ animationDelay: '2s' }}
-          >
-            <svg viewBox="0 0 64 64" fill="none" className="w-[50px] h-[50px]">
-              <rect x="8" y="12" width="48" height="40" rx="4" fill="#fff" stroke="#6b4c4c" strokeWidth="2"/>
-              <rect x="14" y="20" width="20" height="4" rx="2" fill="#ffb4a2"/>
-              <rect x="14" y="28" width="36" height="3" rx="1.5" fill="#e5989b" opacity="0.5"/>
-              <rect x="14" y="34" width="30" height="3" rx="1.5" fill="#e5989b" opacity="0.5"/>
-              <rect x="14" y="40" width="25" height="3" rx="1.5" fill="#e5989b" opacity="0.5"/>
-              <rect x="38" y="18" width="14" height="10" rx="2" fill="#ffcdb2" stroke="#6b4c4c" strokeWidth="1"/>
-            </svg>
-            <span className="text-[11px] font-semibold text-[#6b4c4c] uppercase tracking-wider">Offer</span>
-          </motion.div>
+                {/* Headline */}
+                <motion.h1 variants={fadeInUp} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6">
+                  Treniraš mjesecima,
+                  <span className="block text-gradient mt-2">a gluteus izgleda isto?</span>
+                </motion.h1>
 
-          {/* Result Icon */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="hero-icon-box absolute top-[15%] right-[6%] rounded-[20px] p-5 flex flex-col items-center gap-2"
-            style={{ animationDelay: '3s' }}
-          >
-            <svg viewBox="0 0 64 64" fill="none" className="w-[50px] h-[50px]">
-              <circle cx="32" cy="18" r="10" fill="#ffb4a2"/>
-              <path d="M22 52c0-6 4-12 10-12s10 6 10 12" stroke="#6b4c4c" strokeWidth="3" fill="none"/>
-              <path d="M38 35l8-8m0 0l-3-3m3 3l3-3" stroke="#e5989b" strokeWidth="2" strokeLinecap="round"/>
-              <ellipse cx="42" cy="42" rx="8" ry="4" fill="#ffcdb2" opacity="0.6"/>
-            </svg>
-            <span className="text-[11px] font-semibold text-[#6b4c4c] uppercase tracking-wider">Result</span>
-          </motion.div>
+                {/* Subheadline */}
+                <motion.p variants={fadeInUp} className="text-lg sm:text-xl text-gray-300 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                  Otkrij metodu koju koriste žene koje <span className="text-white font-semibold">STVARNO</span> grade gluteuse — i vidi rezultate već nakon <span className="text-peach-400 font-semibold">prvog treninga</span>.
+                </motion.p>
 
-          {/* Dumbbell Icon */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
-            className="hero-icon-box absolute bottom-[20%] left-[5%] rounded-[20px] p-5 flex flex-col items-center gap-2"
-            style={{ animationDelay: '1.5s' }}
-          >
-            <svg viewBox="0 0 64 64" fill="none" className="w-[50px] h-[50px]">
-              <rect x="8" y="26" width="8" height="12" rx="2" fill="#6b4c4c"/>
-              <rect x="48" y="26" width="8" height="12" rx="2" fill="#6b4c4c"/>
-              <rect x="14" y="28" width="6" height="8" rx="1" fill="#8b5a5a"/>
-              <rect x="44" y="28" width="6" height="8" rx="1" fill="#8b5a5a"/>
-              <rect x="20" y="30" width="24" height="4" rx="2" fill="#a67070"/>
-            </svg>
-            <span className="text-[11px] font-semibold text-[#6b4c4c] uppercase tracking-wider">Training</span>
-          </motion.div>
+                {/* CTA Buttons */}
+                <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+                  <a
+                    href={WHOP_LINK}
+                    className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all duration-300 shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30 hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    Započni Transformaciju
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                  <button
+                    onClick={() => setVideoPlaying(true)}
+                    className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/10 border border-white/20 text-white rounded-2xl font-semibold text-lg hover:bg-white/20 transition-all duration-300"
+                  >
+                    <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                      <Play className="w-5 h-5 ml-0.5" />
+                    </div>
+                    Pogledaj Video
+                  </button>
+                </motion.div>
 
-          {/* Target Icon */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 }}
-            className="hero-icon-box absolute bottom-[15%] right-[8%] rounded-[20px] p-5 flex flex-col items-center gap-2"
-            style={{ animationDelay: '2.5s' }}
-          >
-            <svg viewBox="0 0 64 64" fill="none" className="w-[50px] h-[50px]">
-              <circle cx="32" cy="32" r="24" stroke="#e5989b" strokeWidth="3" fill="none"/>
-              <circle cx="32" cy="32" r="16" stroke="#ffb4a2" strokeWidth="3" fill="none"/>
-              <circle cx="32" cy="32" r="8" stroke="#6b4c4c" strokeWidth="3" fill="none"/>
-              <circle cx="32" cy="32" r="3" fill="#6b4c4c"/>
-            </svg>
-            <span className="text-[11px] font-semibold text-[#6b4c4c] uppercase tracking-wider">Goals</span>
-          </motion.div>
-        </div>
-
-        {/* Top Content - Urgency Badge + Headline */}
-        <motion.div
-          initial="initial"
-          animate="animate"
-          variants={staggerContainer}
-          className="absolute top-8 md:top-12 left-0 right-0 z-10 flex flex-col items-center text-center px-4"
-        >
-          {/* Urgency Badge */}
-          <motion.div
-            variants={fadeInUp}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 backdrop-blur-sm rounded-full mb-4 border border-red-500/30"
-          >
-            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-            <span className="text-sm text-red-700 font-medium">⚡ OGRANIČENA PONUDA - Vrata se zatvaraju uskoro!</span>
-          </motion.div>
-
-          {/* Main Headline */}
-          <motion.h1
-            variants={fadeInUp}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-[#4a3535]"
-          >
-            Treniraš mjesecima,
-            <br />
-            <span className="bg-gradient-to-r from-[#6b4c4c] via-[#8b5a5a] to-[#a67070] bg-clip-text text-transparent">a guzica izgleda isto?</span>
-          </motion.h1>
-        </motion.div>
-
-        {/* Bottom Content - CTA and rest */}
-        <motion.div
-          initial="initial"
-          animate="animate"
-          variants={staggerContainer}
-          className="absolute top-[70vh] left-0 right-0 z-10 flex flex-col items-center text-center px-4 pb-12"
-        >
-          {/* Subheadline */}
-          <motion.p
-            variants={fadeInUp}
-            className="text-base sm:text-lg md:text-xl text-white max-w-3xl mx-auto mb-6 leading-relaxed font-semibold bg-[#4a3535]/70 backdrop-blur-sm rounded-xl px-4 py-3"
-          >
-            Otkrij <span className="text-[#ffcdb2] font-bold">Tehniku Aktivacije Stopala™</span> koju koristi 95% žena koje STVARNO grade gluteuse — i konačno vidi rezultate za koje si mislila da su nemoguće.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <a href={WHOP_LINK} className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#6b4c4c] text-white rounded-xl font-semibold text-lg hover:bg-[#5a3e3e] transition-all duration-300 hover:shadow-lg hover:shadow-[#6b4c4c]/25 active:scale-[0.98] urgency-badge group">
-              Započni Svoju Transformaciju
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <button
-              onClick={() => setVideoPlaying(true)}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/80 backdrop-blur-sm border-2 border-[#6b4c4c]/30 text-[#6b4c4c] rounded-xl font-semibold text-lg hover:bg-white transition-all duration-300 active:scale-[0.98] group"
-            >
-              <Play className="w-5 h-5" />
-              Pogledaj Video
-            </button>
-          </motion.div>
-
-          {/* Social Proof Quick Stats */}
-          <motion.div
-            variants={fadeInUp}
-            className="flex flex-wrap justify-center gap-6 sm:gap-8 mb-8"
-          >
-            {[
-              { value: "2000+", label: "Transformacija" },
-              { value: "39", label: "Video Lekcija" },
-              { value: "655+", label: "Minuta Sadržaja" },
-              { value: "60", label: "Dana Garancije" }
-            ].map((stat, i) => (
-              <div key={i} className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-white">{stat.value}</div>
-                <div className="text-sm text-white/80">{stat.label}</div>
-              </div>
-            ))}
-          </motion.div>
-
-          {/* Countdown Timer */}
-          <motion.div variants={fadeInUp} className="mb-6">
-            <p className="text-white/90 mb-4 text-sm uppercase tracking-wider font-medium">Vrata se zatvaraju za:</p>
-            <div className="flex gap-3 sm:gap-4 justify-center">
-              {[
-                { value: timeLeft.days, label: "DANA" },
-                { value: timeLeft.hours, label: "SATI" },
-                { value: timeLeft.minutes, label: "MIN" },
-                { value: timeLeft.seconds, label: "SEK" }
-              ].map((item, i) => (
-                <div key={i} className="text-center">
-                  <div className="w-16 sm:w-20 h-16 sm:h-20 bg-white rounded-xl flex items-center justify-center shadow-lg">
-                    <span className="text-2xl sm:text-3xl font-bold text-[#B26A47] countdown-number">{String(item.value).padStart(2, '0')}</span>
+                {/* Trust Elements */}
+                <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm text-gray-400">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>60 dana garancije</span>
                   </div>
-                  <span className="text-xs text-white mt-2 block font-medium">{item.label}</span>
+                  <div className="flex items-center gap-2">
+                    <Users className="w-5 h-5 text-peach-400" />
+                    <span>2000+ transformacija</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-yellow-500" />
+                    <span>Instant pristup</span>
+                  </div>
+                </motion.div>
+              </motion.div>
+
+              {/* Right - Visual Card */}
+              <motion.div
+                initial={{ opacity: 0, x: 50, rotate: 3 }}
+                animate={{ opacity: 1, x: 0, rotate: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="relative"
+              >
+                {/* Main Card */}
+                <div className="relative bg-gradient-to-br from-peach-400 via-peach-500 to-coral-500 rounded-3xl p-1 shadow-2xl shadow-peach-500/20">
+                  <div className="bg-gray-900 rounded-[22px] p-6 sm:p-8">
+                    {/* Card Header */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <span className="text-peach-400 text-sm font-semibold uppercase tracking-wider">Starter Pack</span>
+                        <h3 className="text-2xl sm:text-3xl font-bold text-white">GLUTE LAB™</h3>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-3xl font-bold text-white">79.99 <span className="text-lg text-gray-400">KM</span></div>
+                        <div className="text-sm text-gray-400">/ 39.99€</div>
+                      </div>
+                    </div>
+
+                    {/* What's Inside */}
+                    <div className="space-y-3 mb-6">
+                      {[
+                        { icon: Video, text: "39 video lekcija (220+ min)" },
+                        { icon: BookOpen, text: "5 kompletnih modula" },
+                        { icon: FileText, text: "10 radnih listova" },
+                        { icon: Calendar, text: "8-sedmični akcioni plan" },
+                        { icon: MessageCircle, text: "Pristup zajednici + Telegram" },
+                      ].map((item, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-peach-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <item.icon className="w-4 h-4 text-peach-400" />
+                          </div>
+                          <span className="text-gray-300 text-sm sm:text-base">{item.text}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Countdown */}
+                    <div className="bg-gray-800/50 rounded-2xl p-4 mb-6">
+                      <p className="text-center text-gray-400 text-sm mb-3">Ponuda ističe za:</p>
+                      <div className="flex justify-center gap-3">
+                        {[
+                          { value: timeLeft.days, label: "dana" },
+                          { value: timeLeft.hours, label: "sati" },
+                          { value: timeLeft.minutes, label: "min" },
+                          { value: timeLeft.seconds, label: "sek" }
+                        ].map((item, i) => (
+                          <div key={i} className="text-center">
+                            <div className="w-14 h-14 bg-gray-700 rounded-xl flex items-center justify-center mb-1">
+                              <span className="text-2xl font-bold text-white countdown-number">{String(item.value).padStart(2, '0')}</span>
+                            </div>
+                            <span className="text-[10px] text-gray-500 uppercase">{item.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* CTA in Card */}
+                    <a
+                      href={WHOP_LINK}
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all"
+                    >
+                      Kupi Sada — 79.99 KM / 39.99€
+                      <ArrowRight className="w-5 h-5" />
+                    </a>
+
+                    {/* Guarantee Badge */}
+                    <div className="flex items-center justify-center gap-2 mt-4 text-gray-400 text-sm">
+                      <Shield className="w-4 h-4 text-green-500" />
+                      <span>60 dana money-back garancije</span>
+                    </div>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </motion.div>
 
-          {/* Trust Badges */}
+                {/* Floating Testimonial */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                  className="absolute -bottom-16 -left-4 sm:-left-8 bg-white rounded-2xl p-4 shadow-xl max-w-[240px] hidden sm:block"
+                >
+                  <div className="flex gap-1 mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-gray-700 text-sm mb-2">&quot;Prvi put sam osjetila gluteuse tokom čučnja!&quot;</p>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-peach-100 rounded-full flex items-center justify-center text-sm">🍑</div>
+                    <div>
+                      <div className="text-gray-900 text-sm font-semibold">Amela H.</div>
+                      <div className="text-gray-500 text-xs">+6cm u 8 sedmica</div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Floating Stats */}
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                  className="absolute -top-10 -right-4 sm:-right-8 bg-gray-800 border border-gray-700 rounded-2xl p-4 shadow-xl hidden sm:block"
+                >
+                  <div className="text-3xl font-bold text-peach-400">2000+</div>
+                  <div className="text-gray-400 text-sm">Transformacija</div>
+                </motion.div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Bottom - Scroll Indicator */}
           <motion.div
-            variants={fadeInUp}
-            className="flex flex-wrap justify-center gap-4 text-sm text-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5 }}
+            className="flex justify-center pt-8"
           >
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-400" />
-              <span>60 Dana Garancije</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Lock className="w-4 h-4 text-green-400" />
-              <span>Sigurna Kupovina</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-green-400" />
-              <span>Instant Pristup</span>
+            <div className="flex flex-col items-center gap-2 text-gray-500">
+              <span className="text-sm">Saznaj više</span>
+              <motion.div
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <ChevronDown className="w-5 h-5" />
+              </motion.div>
             </div>
           </motion.div>
-        </motion.div>
-
+        </div>
       </section>
 
       {/* Video Modal */}
@@ -573,12 +513,130 @@ export default function LandingPage() {
             <button className="absolute top-6 right-6 text-white hover:text-peach-400 transition-colors">
               <X className="w-8 h-8" />
             </button>
-            <div className="w-full max-w-4xl aspect-video bg-gray-800 rounded-2xl flex items-center justify-center">
-              <p className="text-gray-400">Video placeholder - dodaj YouTube/Vimeo embed</p>
+            <div className="w-full max-w-4xl aspect-video rounded-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+              <video src="/intro-video.mp4" controls autoPlay className="w-full h-full object-contain bg-black rounded-2xl" />
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Intro Video Section */}
+      <section className="bg-gray-50 pt-16 sm:pt-20">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="max-w-4xl mx-auto aspect-video rounded-2xl overflow-hidden"
+            onViewportEnter={(entry) => {
+              const video = entry?.target?.querySelector("video")
+              if (video) video.play()
+            }}
+          >
+            <video src="/intro-video.mp4" muted playsInline controls className="w-full h-full object-cover bg-black rounded-2xl" />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Whop Platform Explainer (Top) */}
+      <section className="section-padding relative overflow-hidden bg-white">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <span className="text-lg text-gray-500">Kurs se nalazi na platformi:</span>
+              <Image src="/whop-logo.svg" alt="Whop" width={100} height={32} className="h-8 w-auto" />
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
+              Tvoj kurs. <span className="text-gradient">Jedna platforma.</span>
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Whop je <strong>#1 platforma na svijetu</strong> za online kurseve i coaching.
+              Preko <strong>$2.5 milijarde</strong> je do sada uplaćeno kroz kurseve na Whop-u.
+              Sigurna kupovina, instant pristup, i sve na jednom mjestu.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="flex justify-center"
+            >
+              <div className="relative w-[280px] sm:w-[320px]">
+                <div className="relative bg-gray-900 rounded-[3rem] p-3 shadow-2xl">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-7 bg-gray-900 rounded-b-2xl z-10" />
+                  <div className="rounded-[2.25rem] overflow-hidden bg-black">
+                    <video
+                      src="/whop-preview.mp4"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="w-full h-auto"
+                    />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Zašto Whop?</h3>
+              <div className="space-y-5">
+                {[
+                  {
+                    icon: Shield,
+                    title: "Sigurna kupovina",
+                    description: "Plaćanje karticom, PayPal-om ili Apple Pay-om. Tvoji podaci su 100% zaštićeni."
+                  },
+                  {
+                    icon: Zap,
+                    title: "Instant pristup",
+                    description: "Odmah nakon kupovine dobivaš pristup svim modulima, video lekcijama i materijalima."
+                  },
+                  {
+                    icon: Users,
+                    title: "Zajednica uključena",
+                    description: "Chat sa ostalim članicama, podrška i motivacija — sve unutar jedne aplikacije."
+                  },
+                  {
+                    icon: Lock,
+                    title: "Doživotni pristup",
+                    description: "Jednom kupiš — tvoje zauvijek. Pristupaj sa telefona, tableta ili računara."
+                  },
+                ].map((feature, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="w-11 h-11 bg-peach-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <feature.icon className="w-5 h-5 text-peach-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1">{feature.title}</h4>
+                      <p className="text-gray-600 text-sm">{feature.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <a
+                href={WHOP_LINK}
+                className="mt-8 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30"
+              >
+                Pogledaj Kurs na Whop-u
+                <ArrowRight className="w-5 h-5" />
+              </a>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {/* Pain Points Section */}
       <section className="section-padding bg-gray-50 relative">
@@ -735,19 +793,14 @@ export default function LandingPage() {
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="aspect-square bg-gradient-to-br from-peach-400 to-coral-500 rounded-3xl flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-grid opacity-20" />
-                <div className="text-center text-white p-8 relative z-10">
-                  <div className="text-8xl mb-4">🍑</div>
-                  <h3 className="text-3xl font-bold mb-2">TEHNIKA AKTIVACIJE STOPALA™</h3>
-                  <p className="text-white/80">5 Koraka do Gluteusa Snova</p>
-                </div>
-                {/* Floating elements */}
-                <div className="absolute top-8 left-8 w-16 h-16 bg-white/20 rounded-full flex items-center justify-center float-slow">
-                  <Flame className="w-8 h-8 text-white" />
-                </div>
-                <div className="absolute bottom-12 right-8 w-14 h-14 bg-white/20 rounded-full flex items-center justify-center float-medium">
-                  <Target className="w-7 h-7 text-white" />
+              <div className="aspect-square rounded-3xl relative overflow-hidden">
+                <video src="/technique-video.mp4" autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/40" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center text-white p-8 relative z-10">
+                    <h3 className="text-3xl font-bold mb-2">TEHNIKA AKTIVACIJE STOPALA™</h3>
+                    <p className="text-white/80">5 Koraka do Gluteusa Snova</p>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -755,10 +808,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Social Proof - Testimonials */}
+      {/* Social Proof - DM Screenshots */}
       <section className="section-padding bg-gray-900 relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-peach-500/10 rounded-full blur-[150px]" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-coral-500/10 rounded-full blur-[120px]" />
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -776,34 +830,168 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, i) => (
+          {/* Desktop: 3-column grid (all visible) */}
+          <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto items-start">
+            {resultColumns.map((column, colIndex) => (
+              <div key={colIndex} className="flex flex-col gap-4">
+                {column.map((src, i) => (
+                  <motion.div
+                    key={src}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: (colIndex * column.length + i) * 0.06 }}
+                  >
+                    <div className="relative rounded-2xl overflow-hidden border border-gray-700/50 hover:border-peach-500/40 transition-all duration-300 group">
+                      <Image
+                        src={src}
+                        alt="Poruka od zadovoljne klijentice"
+                        width={400}
+                        height={300}
+                        className="w-full h-auto object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile: flat list, show 5 then expand */}
+          <div className="sm:hidden flex flex-col gap-4 max-w-md mx-auto">
+            {(showAllDMs ? allScreenshots : allScreenshots.slice(0, 5)).map((src, i) => (
+              <motion.div
+                key={src}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06 }}
+              >
+                <div className="relative rounded-2xl overflow-hidden border border-gray-700/50">
+                  <Image
+                    src={src}
+                    alt="Poruka od zadovoljne klijentice"
+                    width={400}
+                    height={300}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              </motion.div>
+            ))}
+            {!showAllDMs && (
+              <button
+                onClick={() => setShowAllDMs(true)}
+                className="mt-2 inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-800 border border-gray-700 text-white rounded-xl font-semibold hover:bg-gray-700 transition-colors"
+              >
+                Prikaži još DM-ova
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Bottom trust line */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mt-12"
+          >
+            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gray-800/50 border border-gray-700 rounded-full">
+              <MessageCircle className="w-5 h-5 text-peach-400" />
+              <span className="text-gray-300 text-sm">Ovo je samo mali dio poruka koje primamo svaki dan</span>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Transformations - Before/After + Video Testimonials */}
+      <section className="section-padding relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-950 to-gray-900" />
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="text-peach-400 font-semibold mb-4 block">TRANSFORMACIJE</span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-white">
+              Dokaz je u <span className="text-gradient">rezultatima</span>
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Pogledaj transformacije naših članica. Slike govore više od riječi.
+            </p>
+          </motion.div>
+
+          {/* Before/After Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto mb-16">
+            {[
+              "/transformation-1.jpg",
+              "/transformation-2.webp",
+              "/transformation-3.webp",
+              "/transformation-4.jpg",
+            ].map((src, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="relative aspect-square rounded-2xl overflow-hidden border border-gray-700/50 group"
+              >
+                <Image
+                  src={src}
+                  alt="Transformacija prije i poslije"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-white/80 text-sm font-medium">Prije & Poslije</span>
+                    <CheckCircle2 className="w-5 h-5 text-green-400" />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Video Testimonials */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+              <Video className="w-6 h-6 inline-block text-peach-400 mr-2 -mt-1" />
+              Video Svjedočanstva
+            </h3>
+            <p className="text-gray-400">Čuj direktno od žena koje su prošle transformaciju</p>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[
+              "/video-testimonial-1.mp4",
+              "/video-testimonial-2.mp4",
+              "/video-testimonial-3.mp4",
+            ].map((src, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-gray-800 border border-gray-700 rounded-2xl p-6 hover:border-peach-500/50 transition-all"
+                className="relative rounded-2xl overflow-hidden border border-gray-700/50 bg-gray-800"
               >
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="w-5 h-5 fill-peach-400 text-peach-400" />
-                  ))}
-                </div>
-                <p className="text-gray-300 mb-6 leading-relaxed">&quot;{testimonial.quote}&quot;</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-peach-500/20 rounded-full flex items-center justify-center text-xl">
-                      {testimonial.avatar}
-                    </div>
-                    <div>
-                      <div className="font-semibold text-white">{testimonial.author}</div>
-                      <div className="text-sm text-peach-400">{testimonial.result}</div>
-                    </div>
-                  </div>
-                  <CheckCircle2 className="w-6 h-6 text-green-500" />
-                </div>
+                <video
+                  src={src}
+                  controls
+                  playsInline
+                  preload="metadata"
+                  className="w-full aspect-[9/16] object-cover bg-black"
+                />
               </motion.div>
             ))}
           </div>
@@ -830,7 +1018,7 @@ export default function LandingPage() {
             {[
               { icon: BookOpen, value: "5", label: "Modula" },
               { icon: Video, value: "39", label: "Video Lekcija" },
-              { icon: Clock, value: "655+", label: "Minuta" },
+              { icon: Clock, value: "220+", label: "Minuta" },
               { icon: FileText, value: "10", label: "Radnih Listova" }
             ].map((stat, i) => (
               <motion.div
@@ -869,14 +1057,10 @@ export default function LandingPage() {
                       <p className="text-gray-600">{module.description}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-500 sm:flex-shrink-0">
+                  <div className="flex items-center text-sm text-gray-500 sm:flex-shrink-0">
                     <span className="flex items-center gap-1">
                       <Video className="w-4 h-4" />
                       {module.lessons} lekcija
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      {module.duration}
                     </span>
                   </div>
                 </div>
@@ -898,7 +1082,7 @@ export default function LandingPage() {
             <div className="grid sm:grid-cols-2 gap-4">
               {[
                 {
-                  title: "5-Sedmični Akcioni Plan",
+                  title: "8-Sedmični Akcioni Plan",
                   description: "Korak-po-korak vodič kroz cijelu transformaciju",
                   icon: Calendar
                 },
@@ -945,81 +1129,45 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="text-peach-500 font-semibold mb-4 block">PAKETI</span>
+            <span className="text-peach-500 font-semibold mb-4 block">CIJENA</span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
-              Izaberi svoju <span className="text-gradient">transformaciju</span>
+              Započni svoju <span className="text-gradient">transformaciju</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Tri paketa za svaki budžet. Svi uključuju 60 dana garancije povrata novca.
+              Ograničena ponuda — dostupno samo 5 dana. 60 dana garancije povrata novca.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {/* Starter Package */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="bg-white border border-gray-200 rounded-3xl p-8 hover:shadow-xl transition-all"
-            >
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">STARTER</h3>
-                <p className="text-gray-600 mb-4">Savršen za početak</p>
-                <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-5xl font-bold text-gray-900">299</span>
-                  <span className="text-xl text-gray-600">KM</span>
-                </div>
-              </div>
-              <ul className="space-y-4 mb-8">
-                {[
-                  "5 Modula Programa",
-                  "39 Video Lekcija",
-                  "10 Radnih Listova",
-                  "5-Sedmični Plan",
-                  "Pristup Zajednici"
-                ].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={WHOP_LINK}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-colors"
-              >
-                Započni Sada
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </motion.div>
-
-            {/* Complete Package - Popular */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="relative"
-            >
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-peach-500 text-white text-sm font-semibold rounded-full">
-                NAJPOPULARNIJE
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-lg mx-auto"
+          >
+            <div className="relative pt-4">
+              <div className="absolute -top-0 left-1/2 -translate-x-1/2 z-10 px-4 py-1 bg-peach-500 text-white text-sm font-semibold rounded-full">
+                LIMITIRANA PONUDA
               </div>
               <div className="pricing-popular bg-white rounded-3xl p-8 shadow-xl">
                 <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">COMPLETE</h3>
-                  <p className="text-gray-600 mb-4">Najbolja vrijednost</p>
-                  <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-5xl font-bold text-peach-600">499</span>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">GLUTE LAB STARTER PACK™</h3>
+                  <p className="text-gray-600 mb-4">Sve što trebaš za transformaciju</p>
+                  <div className="flex items-baseline justify-center gap-2">
+                    <span className="text-5xl font-bold text-peach-600">79.99</span>
                     <span className="text-xl text-gray-600">KM</span>
+                  </div>
+                  <div className="flex items-baseline justify-center gap-1 mt-1">
+                    <span className="text-2xl font-semibold text-gray-500">/ 39.99€</span>
                   </div>
                 </div>
                 <ul className="space-y-4 mb-8">
                   {[
-                    "Sve iz STARTER paketa",
-                    "Jutarnji Aktivacijski Ritual",
-                    "Bonus: Prehrana za Rast",
-                    "Direktan Telegram Pristup",
-                    "Prioritetna Podrška"
+                    "5 Modula Programa",
+                    "39 Video Lekcija",
+                    "10 Radnih Listova",
+                    "8-Sedmični Plan",
+                    "Pristup Zajednici",
+                    "Direktan Telegram Pristup"
                   ].map((feature, i) => (
                     <li key={i} className="flex items-center gap-3">
                       <CheckCircle2 className="w-5 h-5 text-peach-500 flex-shrink-0" />
@@ -1031,65 +1179,121 @@ export default function LandingPage() {
                   href={WHOP_LINK}
                   className="w-full btn-primary justify-center urgency-badge"
                 >
-                  Započni Sada
+                  Započni Sada — 79.99 KM / 39.99€
                   <ArrowRight className="w-4 h-4" />
                 </a>
-              </div>
-            </motion.div>
-
-            {/* VIP Package */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="bg-gray-900 border border-gray-800 rounded-3xl p-8 hover:shadow-xl transition-all"
-            >
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-white mb-2">VIP</h3>
-                <p className="text-gray-400 mb-4">Za ozbiljne rezultate</p>
-                <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-5xl font-bold text-white">899</span>
-                  <span className="text-xl text-gray-400">KM</span>
+                <div className="flex items-center justify-center gap-2 mt-4 text-gray-500 text-sm">
+                  <Shield className="w-4 h-4 text-green-500" />
+                  <span>60 dana money-back garancije</span>
                 </div>
               </div>
-              <ul className="space-y-4 mb-8">
-                {[
-                  "Sve iz COMPLETE paketa",
-                  "2x Privatni Video Poziv",
-                  "Personalizirani Plan Treninga",
-                  "Analiza Forme (video review)",
-                  "Lifetime Pristup Ažuriranjima"
-                ].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-peach-400 flex-shrink-0" />
-                    <span className="text-gray-300">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={WHOP_LINK}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-white text-gray-900 rounded-xl font-semibold hover:bg-gray-100 transition-colors"
-              >
-                Započni VIP
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
-          {/* Value Stack */}
+      {/* Whop Platform Explainer */}
+      <section className="section-padding relative overflow-hidden bg-white">
+        <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-16 max-w-2xl mx-auto text-center"
+            className="text-center mb-12"
           >
-            <p className="text-gray-600 mb-4">Ukupna vrijednost svega što dobijaš:</p>
-            <div className="flex items-center justify-center gap-4">
-              <span className="text-3xl text-gray-400 line-through">1.979 KM</span>
-              <span className="text-xl text-peach-600 font-semibold">Danas od 299 KM</span>
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <span className="text-lg text-gray-500">Kurs se nalazi na platformi:</span>
+              <Image src="/whop-logo.svg" alt="Whop" width={100} height={32} className="h-8 w-auto" />
             </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
+              Tvoj kurs. <span className="text-gradient">Jedna platforma.</span>
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Whop je <strong>#1 platforma na svijetu</strong> za online kurseve i coaching.
+              Preko <strong>$2.5 milijarde</strong> je do sada uplaćeno kroz kurseve na Whop-u.
+              Sigurna kupovina, instant pristup, i sve na jednom mjestu.
+            </p>
           </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+            {/* Left: Phone mockup with screen recording */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="flex justify-center"
+            >
+              <div className="relative w-[280px] sm:w-[320px]">
+                {/* Phone frame */}
+                <div className="relative bg-gray-900 rounded-[3rem] p-3 shadow-2xl">
+                  {/* Notch */}
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-7 bg-gray-900 rounded-b-2xl z-10" />
+                  {/* Screen */}
+                  <div className="rounded-[2.25rem] overflow-hidden bg-black">
+                    <video
+                      src="/whop-preview.mp4"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="w-full h-auto"
+                    />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Right: Features */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Zašto Whop?</h3>
+              <div className="space-y-5">
+                {[
+                  {
+                    icon: Shield,
+                    title: "Sigurna kupovina",
+                    description: "Plaćanje karticom, PayPal-om ili Apple Pay-om. Tvoji podaci su 100% zaštićeni."
+                  },
+                  {
+                    icon: Zap,
+                    title: "Instant pristup",
+                    description: "Odmah nakon kupovine dobivaš pristup svim modulima, video lekcijama i materijalima."
+                  },
+                  {
+                    icon: Users,
+                    title: "Zajednica uključena",
+                    description: "Chat sa ostalim članicama, podrška i motivacija — sve unutar jedne aplikacije."
+                  },
+                  {
+                    icon: Lock,
+                    title: "Doživotni pristup",
+                    description: "Jednom kupiš — tvoje zauvijek. Pristupaj sa telefona, tableta ili računara."
+                  },
+                ].map((feature, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="w-11 h-11 bg-peach-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <feature.icon className="w-5 h-5 text-peach-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1">{feature.title}</h4>
+                      <p className="text-gray-600 text-sm">{feature.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <a
+                href={WHOP_LINK}
+                className="mt-8 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30"
+              >
+                Pogledaj Kurs na Whop-u
+                <ArrowRight className="w-5 h-5" />
+              </a>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -1145,14 +1349,8 @@ export default function LandingPage() {
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="aspect-[4/5] bg-gradient-to-br from-peach-400 to-coral-500 rounded-3xl overflow-hidden relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <div className="text-9xl mb-4">💪</div>
-                    <p className="text-xl font-semibold">Imran Bezdrob</p>
-                    <p className="text-white/80">Founder & Head Coach</p>
-                  </div>
-                </div>
+              <div className="aspect-[4/5] rounded-3xl overflow-hidden relative">
+                <Image src="/imran-bezdrob.webp" alt="Imran Bezdrob" fill className="object-cover" />
               </div>
               {/* Stats badge */}
               <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl p-6">
@@ -1283,7 +1481,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left">
-              <h3 className="text-xl font-bold text-white mb-2">GLUTE LAB STARTER PACK™</h3>
+              <Image src="/bezdrob-full-logo.png" alt="Bezdrob Transformation Program" width={200} height={36} className="invert h-8 sm:h-10 w-auto mx-auto md:mx-0 mb-2" />
               <p className="text-gray-500">by Imran Bezdrob</p>
             </div>
 
@@ -1308,7 +1506,7 @@ export default function LandingPage() {
 
             <div className="text-center md:text-right">
               <p className="text-gray-500 text-sm">© 2026 Bezdrob. Sva prava zadržana.</p>
-              <p className="text-gray-600 text-xs mt-1">Powered by WHOP</p>
+              <a href="https://mita.agency" target="_blank" rel="noopener noreferrer" className="text-gray-600 text-xs mt-1 hover:text-gray-400 transition-colors">Powered by mita.agency</a>
             </div>
           </div>
         </div>
