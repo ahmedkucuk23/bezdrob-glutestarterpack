@@ -646,7 +646,7 @@ export default function LandingPage() {
               {
                 icon: X,
                 title: "Radiš čučnjeve, ali gluteusi ne rastu",
-                description: "Osjećaš samo noge, a guzica ostaje ista. Frustrirajuće, zar ne?"
+                description: "Osjećaš samo noge, a gluteus ostaje isti. Frustrirajuće, zar ne?"
               },
               {
                 icon: X,
@@ -1081,7 +1081,7 @@ export default function LandingPage() {
                 },
                 {
                   title: "Pristup Zajednici",
-                  description: "Ekskluzivna grupa sestara na istom putu",
+                  description: "Ekskluzivna grupa na istom putu",
                   icon: Users
                 },
                 {
