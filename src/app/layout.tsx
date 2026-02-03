@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Inter, Bebas_Neue, Poppins } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
 const inter = Inter({
@@ -64,6 +65,7 @@ export default function RootLayout({
     <html lang="bs" className={`${inter.variable} ${bebasNeue.variable} ${poppins.variable}`}>
       <body className="font-poppins bg-white text-gray-900 antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   )

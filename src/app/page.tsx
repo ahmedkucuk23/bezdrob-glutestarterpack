@@ -297,9 +297,12 @@ export default function LandingPage() {
             <div className="flex items-center">
               <Image src="/bezdrob-full-logo.png" alt="Bezdrob Transformation Program" width={220} height={40} className="invert h-8 sm:h-10 w-auto" />
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-full">
-              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              <span className="text-red-400 text-sm font-medium">Ograničena ponuda - Samo 5 dana u prodaji!</span>
+            <div className="flex flex-col items-center sm:items-end gap-1">
+              <div className="flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-full">
+                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                <span className="text-red-400 text-sm font-medium">Ograničena ponuda - Samo 5 dana u prodaji!</span>
+              </div>
+              <span className="text-white text-xs sm:text-sm">(do 08. Februara 2026) Poslije toga zatvaramo ZAUVIJEK!</span>
             </div>
           </motion.div>
 
@@ -313,12 +316,6 @@ export default function LandingPage() {
                 variants={staggerContainer}
                 className="text-center lg:text-left"
               >
-                {/* Badge */}
-                <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-3 py-1.5 bg-peach-500/20 border border-peach-500/30 rounded-full mb-6">
-                  <Sparkles className="w-4 h-4 text-peach-400" />
-                  <span className="text-peach-300 text-sm font-medium">Novo: Tehnika Aktivacije Stopala™</span>
-                </motion.div>
-
                 {/* Headline */}
                 <motion.h1 variants={fadeInUp} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6">
                   Treniraš mjesecima,
@@ -330,8 +327,8 @@ export default function LandingPage() {
                   Otkrij metodu koju koriste žene koje <span className="text-white font-semibold">STVARNO</span> grade gluteuse — i vidi rezultate već nakon <span className="text-peach-400 font-semibold">prvog treninga</span>.
                 </motion.p>
 
-                {/* CTA Buttons */}
-                <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+                {/* CTA Button */}
+                <motion.div variants={fadeInUp} className="flex justify-center lg:justify-start mb-8">
                   <a
                     href={WHOP_LINK}
                     className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all duration-300 shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30 hover:scale-[1.02] active:scale-[0.98]"
@@ -339,15 +336,6 @@ export default function LandingPage() {
                     Započni Transformaciju
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </a>
-                  <button
-                    onClick={() => setVideoPlaying(true)}
-                    className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/10 border border-white/20 text-white rounded-2xl font-semibold text-lg hover:bg-white/20 transition-all duration-300"
-                  >
-                    <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
-                      <Play className="w-5 h-5 ml-0.5" />
-                    </div>
-                    Pogledaj Video
-                  </button>
                 </motion.div>
 
                 {/* Trust Elements */}
@@ -547,7 +535,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 mb-6">
               <span className="text-lg text-gray-500">Kurs se nalazi na platformi:</span>
               <Image src="/whop-logo.svg" alt="Whop" width={100} height={32} className="h-8 w-auto" />
             </div>
@@ -1201,7 +1189,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 mb-6">
               <span className="text-lg text-gray-500">Kurs se nalazi na platformi:</span>
               <Image src="/whop-logo.svg" alt="Whop" width={100} height={32} className="h-8 w-auto" />
             </div>
