@@ -33,6 +33,19 @@ import { cn } from "@/lib/utils"
 // WHOP checkout link - replace with actual link
 const WHOP_LINK = "https://whop.com/bezdrob-glute-starter-pack/"
 
+// Facebook Pixel tracking
+declare global {
+  interface Window {
+    fbq: (action: string, event: string) => void
+  }
+}
+
+const trackInitiateCheckout = () => {
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'InitiateCheckout')
+  }
+}
+
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0 },
@@ -269,7 +282,7 @@ export default function LandingPage() {
               <div className="flex items-center">
                 <Image src="/bezdrob-full-logo.png" alt="Bezdrob Transformation Program" width={180} height={32} className="invert h-6 sm:h-8 w-auto" />
               </div>
-              <a href={WHOP_LINK} className="btn-primary !py-2.5 !px-6 !text-base urgency-badge">
+              <a href={WHOP_LINK} onClick={trackInitiateCheckout} className="btn-primary !py-2.5 !px-6 !text-base urgency-badge">
                 Pridruži Se Sada
                 <ArrowRight className="w-4 h-4" />
               </a>
@@ -331,6 +344,7 @@ export default function LandingPage() {
                 <motion.div variants={fadeInUp} className="flex justify-center lg:justify-start mb-8">
                   <a
                     href={WHOP_LINK}
+                    onClick={trackInitiateCheckout}
                     className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all duration-300 shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30 hover:scale-[1.02] active:scale-[0.98]"
                   >
                     Započni Transformaciju
@@ -418,6 +432,7 @@ export default function LandingPage() {
                     {/* CTA in Card */}
                     <a
                       href={WHOP_LINK}
+                      onClick={trackInitiateCheckout}
                       className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all"
                     >
                       Kupi Sada — 79.99 KM / 39.99€
@@ -616,6 +631,7 @@ export default function LandingPage() {
 
               <a
                 href={WHOP_LINK}
+                onClick={trackInitiateCheckout}
                 className="mt-8 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30"
               >
                 Pogledaj Kurs na Whop-u
@@ -1165,6 +1181,7 @@ export default function LandingPage() {
                 </ul>
                 <a
                   href={WHOP_LINK}
+                  onClick={trackInitiateCheckout}
                   className="w-full btn-primary justify-center urgency-badge"
                 >
                   Započni Sada — 79.99 KM / 39.99€
@@ -1275,6 +1292,7 @@ export default function LandingPage() {
 
               <a
                 href={WHOP_LINK}
+                onClick={trackInitiateCheckout}
                 className="mt-8 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30"
               >
                 Pogledaj Kurs na Whop-u
@@ -1439,7 +1457,7 @@ export default function LandingPage() {
 
             {/* CTA */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <a href={WHOP_LINK} className="btn-primary text-lg urgency-badge group">
+              <a href={WHOP_LINK} onClick={trackInitiateCheckout} className="btn-primary text-lg urgency-badge group">
                 Da, Želim Transformaciju!
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
