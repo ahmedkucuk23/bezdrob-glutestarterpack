@@ -65,9 +65,7 @@ export default function RootLayout({
   return (
     <html lang="bs" className={`${inter.variable} ${bebasNeue.variable} ${poppins.variable}`}>
       <head>
-        <Script
-          id="facebook-pixel"
-          strategy="beforeInteractive"
+        <script
           dangerouslySetInnerHTML={{
             __html: `
               !function(f,b,e,v,n,t,s)
