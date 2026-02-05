@@ -64,12 +64,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="bs" className={`${inter.variable} ${bebasNeue.variable} ${poppins.variable}`}>
-      <body className="font-poppins bg-white text-gray-900 antialiased">
-        {children}
-        <Analytics />
+      <head>
         <Script
           id="facebook-pixel"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               !function(f,b,e,v,n,t,s)
@@ -85,6 +83,8 @@ export default function RootLayout({
             `,
           }}
         />
+      </head>
+      <body className="font-poppins bg-white text-gray-900 antialiased">
         <noscript>
           <img
             height="1"
@@ -94,6 +94,8 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
+        {children}
+        <Analytics />
       </body>
     </html>
   )
