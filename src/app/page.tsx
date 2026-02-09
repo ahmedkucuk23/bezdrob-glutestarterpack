@@ -54,7 +54,7 @@ const translations = {
     // Hero section
     hero: {
       limitedOffer: "Ograničena ponuda - Samo 5 dana u prodaji!",
-      closingDate: "(do 08. Februara 2026) Poslije toga zatvaramo ZAUVIJEK!",
+      closingDate: "(do 10. Februara 2026) Poslije toga zatvaramo ZAUVIJEK!",
       headline: "Treniraš mjesecima,",
       headlineHighlight: "a gluteus izgleda isto?",
       subheadline: "Otkrij metodu koju koriste žene koje",
@@ -284,7 +284,7 @@ const translations = {
     // Hero section
     hero: {
       limitedOffer: "Limited offer - Only 5 days on sale!",
-      closingDate: "(until February 8, 2026) After that we close FOREVER!",
+      closingDate: "(until February 10, 2026) After that we close FOREVER!",
       headline: "Training for months,",
       headlineHighlight: "but your glutes look the same?",
       subheadline: "Discover the method used by women who",
@@ -706,9 +706,9 @@ export default function LandingPage() {
 
   const t = translations[lang]
 
-  // Cart closes February 8, 2026 at 23:59 Sarajevo time (CET = UTC+1)
+  // Cart closes February 10, 2026 at 19:00 Sarajevo time (CET = UTC+1)
   const cartCloseDate = useMemo(() => {
-    return new Date('2026-02-08T23:59:00+01:00')
+    return new Date('2026-02-10T19:00:00+01:00')
   }, [])
 
   useEffect(() => {
