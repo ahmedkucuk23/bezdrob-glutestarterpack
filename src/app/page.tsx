@@ -29,6 +29,9 @@ import { cn } from "@/lib/utils"
 // WHOP checkout link - replace with actual link
 const WHOP_LINK = "https://whop.com/bezdrob-glute-starter-pack/"
 
+// SOLD OUT FLAG - set to true when course is sold out
+const IS_SOLD_OUT = true
+
 // Facebook Pixel tracking
 declare global {
   interface Window {
@@ -777,10 +780,17 @@ export default function LandingPage() {
                 <div className="hidden sm:block">
                   <LanguageToggleLight lang={lang} setLang={setLang} />
                 </div>
-                <a href={WHOP_LINK} onClick={trackInitiateCheckout} className="btn-primary !py-2.5 !px-6 !text-base urgency-badge">
-                  {t.stickyBar.cta}
-                  <ArrowRight className="w-4 h-4" />
-                </a>
+{IS_SOLD_OUT ? (
+                  <div className="inline-flex items-center gap-2 px-6 py-2.5 bg-gray-700 text-gray-300 rounded-xl font-semibold text-base cursor-not-allowed">
+                    <Lock className="w-4 h-4" />
+                    SOLD OUT
+                  </div>
+                ) : (
+                  <a href={WHOP_LINK} onClick={trackInitiateCheckout} className="btn-primary !py-2.5 !px-6 !text-base urgency-badge">
+                    {t.stickyBar.cta}
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                )}
               </div>
             </div>
           </motion.div>
@@ -841,14 +851,21 @@ export default function LandingPage() {
 
                 {/* CTA Button */}
                 <motion.div variants={fadeInUp} className="flex justify-center lg:justify-start mb-8">
-                  <a
-                    href={WHOP_LINK}
-                    onClick={trackInitiateCheckout}
-                    className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all duration-300 shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30 hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    {t.hero.cta}
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </a>
+                  {IS_SOLD_OUT ? (
+                    <div className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-gray-700 text-gray-300 rounded-2xl font-bold text-lg cursor-not-allowed">
+                      <Lock className="w-5 h-5" />
+                      SOLD OUT
+                    </div>
+                  ) : (
+                    <a
+                      href={WHOP_LINK}
+                      onClick={trackInitiateCheckout}
+                      className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all duration-300 shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30 hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      {t.hero.cta}
+                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  )}
                 </motion.div>
 
                 {/* Trust Elements */}
@@ -929,14 +946,21 @@ export default function LandingPage() {
                     </div>
 
                     {/* CTA in Card */}
-                    <a
-                      href={WHOP_LINK}
-                      onClick={trackInitiateCheckout}
-                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all"
-                    >
-                      {t.hero.buyNow}
-                      <ArrowRight className="w-5 h-5" />
-                    </a>
+                    {IS_SOLD_OUT ? (
+                      <div className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gray-700 text-gray-300 rounded-xl font-bold text-lg cursor-not-allowed">
+                        <Lock className="w-5 h-5" />
+                        SOLD OUT
+                      </div>
+                    ) : (
+                      <a
+                        href={WHOP_LINK}
+                        onClick={trackInitiateCheckout}
+                        className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all"
+                      >
+                        {t.hero.buyNow}
+                        <ArrowRight className="w-5 h-5" />
+                      </a>
+                    )}
 
                     {/* Guarantee Badge */}
                     <div className="flex items-center justify-center gap-2 mt-4 text-gray-400 text-sm">
@@ -1108,14 +1132,21 @@ export default function LandingPage() {
                 ))}
               </div>
 
-              <a
-                href={WHOP_LINK}
-                onClick={trackInitiateCheckout}
-                className="mt-8 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30"
-              >
-                {t.whop.viewCourse}
-                <ArrowRight className="w-5 h-5" />
-              </a>
+              {IS_SOLD_OUT ? (
+                <div className="mt-8 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gray-400 text-gray-600 rounded-2xl font-bold text-lg cursor-not-allowed">
+                  <Lock className="w-5 h-5" />
+                  SOLD OUT
+                </div>
+              ) : (
+                <a
+                  href={WHOP_LINK}
+                  onClick={trackInitiateCheckout}
+                  className="mt-8 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30"
+                >
+                  {t.whop.viewCourse}
+                  <ArrowRight className="w-5 h-5" />
+                </a>
+              )}
             </motion.div>
           </div>
         </div>
@@ -1688,14 +1719,21 @@ export default function LandingPage() {
                 ))}
               </div>
 
-              <a
-                href={WHOP_LINK}
-                onClick={trackInitiateCheckout}
-                className="mt-8 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30"
-              >
-                {t.whop.viewCourse}
-                <ArrowRight className="w-5 h-5" />
-              </a>
+              {IS_SOLD_OUT ? (
+                <div className="mt-8 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gray-400 text-gray-600 rounded-2xl font-bold text-lg cursor-not-allowed">
+                  <Lock className="w-5 h-5" />
+                  SOLD OUT
+                </div>
+              ) : (
+                <a
+                  href={WHOP_LINK}
+                  onClick={trackInitiateCheckout}
+                  className="mt-8 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-peach-500 to-coral-500 text-white rounded-2xl font-bold text-lg hover:from-peach-600 hover:to-coral-600 transition-all shadow-lg shadow-peach-500/25 hover:shadow-xl hover:shadow-peach-500/30"
+                >
+                  {t.whop.viewCourse}
+                  <ArrowRight className="w-5 h-5" />
+                </a>
+              )}
             </motion.div>
           </div>
         </div>
@@ -1850,10 +1888,17 @@ export default function LandingPage() {
 
             {/* CTA */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <a href={WHOP_LINK} onClick={trackInitiateCheckout} className="btn-primary text-lg urgency-badge group">
-                {t.finalCta.cta}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
+              {IS_SOLD_OUT ? (
+                <div className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-gray-700 text-gray-300 rounded-2xl font-bold text-lg cursor-not-allowed">
+                  <Lock className="w-5 h-5" />
+                  SOLD OUT
+                </div>
+              ) : (
+                <a href={WHOP_LINK} onClick={trackInitiateCheckout} className="btn-primary text-lg urgency-badge group">
+                  {t.finalCta.cta}
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </a>
+              )}
             </div>
 
             {/* Final trust elements */}
